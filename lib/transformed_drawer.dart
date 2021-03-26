@@ -2,66 +2,103 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flag/flag.dart';
 
-class TransformedDrawer extends StatelessWidget {
+class TransformedDrawer extends StatefulWidget {
   const TransformedDrawer({Key key}) : super(key: key);
+
+  @override
+  _TransformedDrawerState createState() => _TransformedDrawerState();
+}
+
+class _TransformedDrawerState extends State<TransformedDrawer>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100),
+    );
+  }
+
+  void toggleAnimation() => _animationController.isDismissed
+      ? _animationController.forward()
+      : _animationController.reverse();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final double maxSlide = size.width / 8;
+    final double maxSlide = size.width / 4;
     return Scaffold(
-      body: Stack(
-        children: [
-          DrawerContainer(),
-          Transform(
-            alignment: Alignment.centerRight,
-            transform: Matrix4.identity()
-              ..translate(maxSlide)
-              ..scale(0.5),
-            child: HomeContainer(),
-          ),
-        ],
-      ),
-    );
+        body: AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, _) {
+        double slide = maxSlide * _animationController.value;
+        double scale = 1 - (_animationController.value * 0.3);
+        return Stack(
+          children: [
+            DrawerContainer(),
+            Transform(
+              alignment: Alignment.centerRight,
+              transform: Matrix4.identity()
+                ..translate(slide)
+                ..scale(scale),
+              child: HomeContainer(
+                onPressed: toggleAnimation,
+              ),
+            ),
+          ],
+        );
+      },
+    ));
   }
 }
 
 class HomeContainer extends StatelessWidget {
-  const HomeContainer({Key key}) : super(key: key);
+  const HomeContainer({Key key, @required this.onPressed}) : super(key: key);
   final String _bg = "assets/background/bg.svg";
   final String _menu = "assets/icon/menu.svg";
+  final VoidCallback onPressed;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          child: SvgPicture.asset(
-            _bg,
-            fit: BoxFit.cover,
-          ),
+    return Container(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          color: Color(0xffFBAE3C),
+          spreadRadius: 0,
+          blurRadius: 12,
+          offset: Offset(0, 4), // changes position of shadow
         ),
-        Align(
-          alignment: Alignment.center,
-          child: Text(
-            'Transformed Drawer',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Color(0xffFBAE3C),
+      ]),
+      child: Stack(
+        children: [
+          Container(
+            child: SvgPicture.asset(
+              _bg,
+              fit: BoxFit.cover,
             ),
           ),
-        ),
-        Positioned(
-          left: 25,
-          top: 75,
-          child: InkWell(
-            onTap: () {
-              print('awesoe');
-            },
-            child: SvgPicture.asset(_menu),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              'Transformed Drawer',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Color(0xffFBAE3C),
+              ),
+            ),
           ),
-        ),
-      ],
+          Positioned(
+            left: 25,
+            top: 75,
+            child: InkWell(
+              onTap: onPressed,
+              child: SvgPicture.asset(_menu),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
