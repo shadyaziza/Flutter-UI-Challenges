@@ -4,51 +4,64 @@ import 'package:flag/flag.dart';
 
 class TransformedDrawer extends StatelessWidget {
   const TransformedDrawer({Key key}) : super(key: key);
-  final String _menu = "assets/icon/menu.svg";
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(body: DrawerContainer()
-        //  Stack(
-        //   children: [
-        //     HomeContainer(),
-        //     Align(
-        //       alignment: Alignment.center,
-        //       child: Text(
-        //         'Transformed Drawer',
-        //         style: TextStyle(
-        //           fontSize: 20,
-        //           fontWeight: FontWeight.w500,
-        //           color: Color(0xffFBAE3C),
-        //         ),
-        //       ),
-        //     ),
-        //     Positioned(
-        //       left: 25,
-        //       top: 75,
-        //       child: InkWell(
-        //         onTap: () {
-        //           print('awesoe');
-        //         },
-        //         child: SvgPicture.asset(_menu),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        );
+    final double maxSlide = size.width / 8;
+    return Scaffold(
+      body: Stack(
+        children: [
+          DrawerContainer(),
+          Transform(
+            alignment: Alignment.centerRight,
+            transform: Matrix4.identity()
+              ..translate(maxSlide)
+              ..scale(0.5),
+            child: HomeContainer(),
+          ),
+        ],
+      ),
+    );
   }
 }
 
 class HomeContainer extends StatelessWidget {
   const HomeContainer({Key key}) : super(key: key);
   final String _bg = "assets/background/bg.svg";
+  final String _menu = "assets/icon/menu.svg";
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: SvgPicture.asset(
-        _bg,
-        fit: BoxFit.cover,
-      ),
+    return Stack(
+      children: [
+        Container(
+          child: SvgPicture.asset(
+            _bg,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Transformed Drawer',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Color(0xffFBAE3C),
+            ),
+          ),
+        ),
+        Positioned(
+          left: 25,
+          top: 75,
+          child: InkWell(
+            onTap: () {
+              print('awesoe');
+            },
+            child: SvgPicture.asset(_menu),
+          ),
+        ),
+      ],
     );
   }
 }
