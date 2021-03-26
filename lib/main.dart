@@ -8,6 +8,7 @@ void main() {
 class UIChallenge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: TransformedDrawer());
+    return MaterialApp(
+        theme: ThemeData(fontFamily: "Monda"), home: TransformedDrawer());
   }
 }
