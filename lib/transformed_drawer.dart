@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flag/flag.dart';
 
 class TransformedDrawer extends StatelessWidget {
   const TransformedDrawer({Key key}) : super(key: key);
@@ -7,34 +8,34 @@ class TransformedDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
-        children: [
-          HomeContainer(),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Transformed Drawer',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Color(0xffFBAE3C),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 25,
-            top: 75,
-            child: InkWell(
-              onTap: () {
-                print('awesoe');
-              },
-              child: SvgPicture.asset(_menu),
-            ),
-          ),
-        ],
-      ),
-    );
+    return Scaffold(body: DrawerContainer()
+        //  Stack(
+        //   children: [
+        //     HomeContainer(),
+        //     Align(
+        //       alignment: Alignment.center,
+        //       child: Text(
+        //         'Transformed Drawer',
+        //         style: TextStyle(
+        //           fontSize: 20,
+        //           fontWeight: FontWeight.w500,
+        //           color: Color(0xffFBAE3C),
+        //         ),
+        //       ),
+        //     ),
+        //     Positioned(
+        //       left: 25,
+        //       top: 75,
+        //       child: InkWell(
+        //         onTap: () {
+        //           print('awesoe');
+        //         },
+        //         child: SvgPicture.asset(_menu),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        );
   }
 }
 
@@ -47,6 +48,91 @@ class HomeContainer extends StatelessWidget {
       child: SvgPicture.asset(
         _bg,
         fit: BoxFit.cover,
+      ),
+    );
+  }
+}
+
+class DrawerContainer extends StatelessWidget {
+  const DrawerContainer({Key key}) : super(key: key);
+  final String _avatar = 'https://i.pravatar.cc/100';
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 48.0, vertical: 55.0),
+      color: Color(0xff001220),
+      child: ListView(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: CircleAvatar(
+              radius: 50,
+              child: ClipOval(
+                child: Image.network(_avatar),
+              ),
+            ),
+          ),
+          Divider(
+            height: 28.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Home",
+                  style: TextStyle(color: Color(0xffFBAE3C), fontSize: 20),
+                ),
+                SizedBox(
+                  height: 28.0,
+                ),
+                Text(
+                  "Profile",
+                  style: TextStyle(
+                      color: Color(0xffFBAE3C).withOpacity(0.7), fontSize: 20),
+                ),
+                SizedBox(
+                  height: 28.0,
+                ),
+                Text(
+                  "Settings",
+                  style: TextStyle(
+                      color: Color(0xffFBAE3C).withOpacity(0.7), fontSize: 20),
+                ),
+                SizedBox(
+                  height: 28.0,
+                ),
+                Text(
+                  "Help",
+                  style: TextStyle(
+                      color: Color(0xffFBAE3C).withOpacity(0.7), fontSize: 20),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 6,
+                ),
+                Container(
+                  padding: EdgeInsets.only(
+                      right: MediaQuery.of(context).size.width / 1.7),
+                  child: Flag(
+                    'ES',
+                    fit: BoxFit.contain,
+                    height: 20,
+                    // fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(
+                  height: 28.0,
+                ),
+                Text(
+                  "Sign Out",
+                  style: TextStyle(
+                      color: Color(0xffFBAE3C).withOpacity(0.7), fontSize: 20),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
